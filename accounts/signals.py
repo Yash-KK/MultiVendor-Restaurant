@@ -9,15 +9,12 @@ from .models import (
 )
 @receiver(post_save, sender=User)
 def create_userProfile(sender, instance, created, **kwargs):
-    print(created)
     if created:
         UserProfile.objects.create(user=instance)
-        print("User profile created")
+       
     else:
         try:
             profile = UserProfile.objects.get(user=instance)
             profile.save()
-            print("Profile has been updated")  
         except:
             UserProfile.objects.create(user=instance)
-            print("profile created ")
