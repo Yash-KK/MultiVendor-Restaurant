@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block 'title' %}
+    Vendor Dashboard
+{% endblock 'title' %}
+    
+
+{% block 'content' %}
+Vendor Dashboard
+   Welcome {{ user.first_name }} who is a {{ user.get_role }}
+
+   {% include 'includes/messages.html' %}
+{% endblock 'content' %}
+    
+
