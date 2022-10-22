@@ -149,3 +149,11 @@ MESSAGE_TAGS = {
         messages.WARNING: 'alert-warning',
         messages.ERROR: 'alert-danger',
  }
+
+
+# Email Configuration
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'yashpertisen@gmail.com'
+EMAIL_HOST_PASSWORD = 'hcwjpjyvlowtntrh'
+EMAIL_USE_TLS = True
