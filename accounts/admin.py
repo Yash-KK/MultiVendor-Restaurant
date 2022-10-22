@@ -10,7 +10,7 @@ from .models import (
 # register the models here
 
 class AdminUser(UserAdmin):
-    list_display = ['email','first_name', 'last_name', 'username', 'role', 'date_joined']
+    list_display = ['email','first_name', 'last_name', 'username', 'is_active','role','date_joined']
     list_display_links = ['email']
     filter_horizontal = ()
     list_filter = ()
