@@ -1,4 +1,3 @@
-from base64 import urlsafe_b64encode
 from django.shortcuts import HttpResponse, redirect, render
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -180,7 +179,6 @@ def logout_user(request):
     logout(request)
     messages.success(request, 'Logged out!')
     return redirect('login-user')
-
 
 
 def forgot_password(request):
