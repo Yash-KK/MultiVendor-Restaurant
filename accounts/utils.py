@@ -4,7 +4,7 @@ from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
-
+from django.core.exceptions import ValidationError
 # Helper functions
 
 def detect_user(user):
@@ -73,3 +73,10 @@ def vendor_is_not_approved_mail(user):
 
     
     
+    
+def validate_file_extension(value):
+    import os
+    ext = os.path.splitext(value.name)[1]
+    valid_extensions = ['.png','.jpg','.jpeg']
+    if not ext in valid_extensions:
+        raise ValidationError(u'Unsupported File extension. Allowed extension:' + str(valid_extensions))    

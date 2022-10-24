@@ -23,6 +23,9 @@ from .models import (
     User,
     UserProfile
 )
+from vendor.models import (
+    Vendor
+)
 
 # Create your views here.
 def if_customer_user(user):
@@ -223,5 +226,6 @@ def customer_dashboard(request):
 
 @login_required(login_url='login-user')
 @user_passes_test(if_vendor_user)
-def vendor_dashboard(request):
+def vendor_dashboard(request):   
     return render(request, 'accounts/vDashboard.html')
+ 
