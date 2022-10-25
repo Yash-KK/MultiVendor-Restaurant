@@ -31,13 +31,13 @@
 							<div class="user-dashboard loader-holder">
 								<div class="user-holder">
 									<div class='text-center'>
-										<h2>Edit Category</h2>
+										<h2>Edit Food Item</h2>
 									</div>	
                                     {% comment %} <h6>Menu Categories</h6>                                    {% endcomment %}
-									<input class='btn btn-info' type="button" value="Back" onclick="history.back()">
+                                    <input class='btn btn-info' type="button" value="Back" onclick="history.back()">
 
-									<hr>
-                                    <form action="{% url 'edit-category' category.slug %}" method="POST">
+                                    <hr>
+                                    <form action="{% url 'edit-food-item' food_item.slug %}" method="POST" enctype="multipart/form-data">
 										{% csrf_token %}
 										<div class="form-fields-set">
 											<ul> 
@@ -45,16 +45,39 @@
 													<div class="row">														
 														<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 															<div class="field-holder">
-																<label><strong>Category Name *</strong></label>
-																{{ form.category_name }}
+																<label><strong>Food Item Name *</strong></label>
+																{{ form.food_title }}
 															</div>
 														</div>														
+														<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+															<div class="field-holder">
+																<label><strong>Category</strong></label>
+																{{ form.category }}
+															</div>
+														</div>	
+														
+
 														<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 															<div class="field-holder">
 																<label><strong>Description</strong></label>
 																{{ form.description }}
 															</div>
-														</div>														
+														</div>	
+														<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+															<div class="field-holder">
+																<label><strong>Price</strong></label>
+																{{ form.price }}
+															</div>
+														</div>	
+														
+														<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+															<div class="field-holder">
+																<label><strong>Image</strong></label>
+																{{ form.image }}
+															</div>
+														</div>	
+
+														
 													</div>
 												</li>
 											</ul>

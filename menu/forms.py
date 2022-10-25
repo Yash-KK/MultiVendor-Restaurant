@@ -3,9 +3,15 @@ from django import forms
 
 #MODELS
 from .models import (
-    Category
+    Category,
+    FoodItem
 )
 
+class FoodItemForm(forms.ModelForm):
+    class Meta:
+        model = FoodItem
+        fields = ['category', 'vendor', 'food_title', 'slug', 'description', 'image', 'price']
+        
 
 class CategoryForm(forms.ModelForm):
     class Meta:
