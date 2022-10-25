@@ -34,7 +34,9 @@
 										<h2>Add Category</h2>
 									</div>	
                                     {% comment %} <h6>Menu Categories</h6>                                    {% endcomment %}
-                                    <hr>
+									<input class='btn btn-info' type="button" value="Back" onclick="history.back()">
+
+									<hr>
                                     <form action="{% url 'add-category' %}" method="POST">
 										{% csrf_token %}
 										<div class="form-fields-set">

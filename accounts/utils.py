@@ -77,6 +77,6 @@ def vendor_is_not_approved_mail(user):
 def validate_file_extension(value):
     import os
     ext = os.path.splitext(value.name)[1]
-    valid_extensions = ['.png','.jpg','.jpeg']
+    valid_extensions = ['.png','.jpg','.jpeg','.PNG','.JPG','.JPEG']
     if not ext in valid_extensions:
         raise ValidationError(u'Unsupported File extension. Allowed extension:' + str(valid_extensions))    

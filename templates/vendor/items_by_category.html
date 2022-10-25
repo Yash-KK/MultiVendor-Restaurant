@@ -37,6 +37,8 @@
                                     <div class='text-center'>
 										<h2>Build Your Menu</h2>
 									</div>	
+                                    <input class='btn btn-info' type="button" value="Back" onclick="history.back()">
+
                                     <hr>								
 									<h6>Category: <span class='category-name'> {{ category.category_name }}</span> </h6>									                                                       
                                    
@@ -59,7 +61,7 @@
                                                             <a href="#"><p class='mb-0 font-weight-bold'>{{ item.food_title }}</p></a>
                                                             <small class='text-muted'> {{ item.description }} </small>
                                                         </td>
-                                                        <td><i class="fa fa-wrench" aria-hidden="true"></i>   <i class="fa fa-trash tr" aria-hidden="true"></i></td>													
+                                                        <td><a href="{% url 'edit-food-item' item.slug %}"><i style="padding-right:10px; color:black;" class="fa fa-wrench" aria-hidden="true"></i></a>   <a href="{% url 'delete-food-item' item.slug %}"><i class="fa fa-trash tr" aria-hidden="true"></i></a></td>													
                                                     </tr>    
                                                 {% endfor %} 
                                             {% else %}

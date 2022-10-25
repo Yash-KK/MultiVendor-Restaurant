@@ -9,9 +9,16 @@ urlpatterns = [
     path("profile/", views.v_profile, name='v-profile'),
     
     path("menu-builder/", views.menu_builder, name='menu-builder'),
-    path("add-category/", views.add_category, name='add-category'),
-    path('edit-category/<slug:slug>/', views.edit_category, name='edit-category'),
-    path('delete-category/<slug:slug>/', views.delete_category, name='delete-category'),
-    path('items-by-category/<slug:category_slug>/', views.items_by_category, name='items-by-category'),
+    path("menu-builder/add-category/", views.add_category, name='add-category'),
+    
+    #CATEGORY CRUD
+    path('menu-builder/edit-category/<slug:slug>/', views.edit_category, name='edit-category'),
+    path('menu-builder/delete-category/<slug:slug>/', views.delete_category, name='delete-category'),
+    path('menu-builder/items-by-category/<slug:category_slug>/', views.items_by_category, name='items-by-category'),
+    
+    #FOOD ITEM CRUD
+    path('menu-builder/add-food-item/', views.add_food_item, name='add-food-item'),
+    path('menu-builder/delete-food-item/<slug:slug>/', views.delete_food_item, name='delete-food-item'),
+    path("menu-builder/edit-food-item/<slug:slug>/", views.edit_food_item, name='edit-food-item')
     
 ]

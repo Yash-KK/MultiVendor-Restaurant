@@ -16,7 +16,8 @@ from accounts.forms import (
     UserProfileForm
 )
 from menu.forms import (
-    CategoryForm
+    CategoryForm,
+    FoodItemForm
 )
 
 #MODELS
@@ -145,3 +146,75 @@ def delete_category(request, slug=None):
     messages.success(request, 'Category has been deleted!')
     return redirect('menu-builder')
     
+
+@login_required(login_url='login-user')
+@user_passes_test(if_vendor_user)
+def add_food_item(request):
+    form = FoodItemForm()  
+    if request.method == 'POST':      
+        vendor = get_vendor(request)  
+        food_title = request.POST['food_title']        
+        slug = slugify(food_title)
+        description = request.POST['description']
+        price = request.POST['price']
+        image = request.FILES['image']
+        
+        
+        cat_pk = request.POST['category']
+        category = Category.objects.get(pk=cat_pk)
+               
+       
+        food_item = FoodItem.objects.create(vendor=vendor,category=category, food_title=food_title, slug=slug, description=description, price=price, image=image)
+        food_item.save()
+        messages.success(request, 'A new Food Item has been added!')
+        return redirect('items-by-category', category.slug)       
+        
+    else:
+        form = FoodItemForm()    
+        form.fields['category'].queryset = Category.objects.filter(vendor=get_vendor(request))
+    context = {
+        'form':form
+    }
+    return render(request, 'vendor/add_food_item.html', context)
+
+
+@login_required(login_url='login-user')
+@user_passes_test(if_vendor_user)
+def delete_food_item(request, slug=None):
+    food_item = FoodItem.objects.get(slug=slug)
+    category_slug = food_item.category.slug
+    messages.success(request, 'Successfully deleted the Food Item')
+    food_item.delete()
+    return redirect('items-by-category',category_slug)
+
+
+@login_required(login_url='login-user')
+@user_passes_test(if_vendor_user)
+def edit_food_item(request, slug=None):
+    food_item = FoodItem.objects.get(slug=slug)
+    if request.method == 'POST':
+        vendor = get_vendor(request)  
+        food_title = request.POST['food_title']        
+        slug = slugify(food_title)
+        description = request.POST['description']
+        price = request.POST['price']
+        image = request.FILES['image']
+        
+        food_item.vendor = vendor
+        food_item.food_title = food_title
+        food_item.slug = slug
+        food_item.description = description
+        food_item.price = price
+        food_item.image = image
+        
+        food_item.save()
+        messages.success(request, 'Food item details have been updated')
+        return redirect('items-by-category', food_item.category.slug)
+    else:            
+        form = FoodItemForm(instance=food_item)
+        form.fields['category'].queryset = Category.objects.filter(vendor=get_vendor(request))
+    context = {
+        'food_item':food_item,
+        'form':form
+    }
+    return render(request, 'vendor/edit_food_item.html',context)
