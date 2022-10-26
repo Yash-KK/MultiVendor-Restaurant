@@ -131,17 +131,23 @@
 																		<h6>{{ item.food_title }}</h6>
 																		<span>{{ item.description }} </span>
 																	</div>
+																	
 																	<div class="price-holder">
 																		<span class="price">${{ item.price }}</span>
-																		<a href="#" class="restaurant-add-menu-btn"><i class="icon-plus4 text-color"></i></a>
-																		<span id="add-menu-loader-10"></span>
+																		<a href="#" class="decrease_cart" data-id="{{ item.id }}" data-url="{% url 'decrease-cart' item.id %}" ><i class="icon-minus text-color"></i></a>
+																		<label style='margin-left: 25px;' id='qty-{{ item.id }}'>0</label>																		
+																		<a href="#" class="add_to_cart" data-id="{{ item.id }}" data-url="{% url 'add-to-cart' item.id %}"><i class="icon-plus4 text-color"></i></a>																		
 																	</div>
 																</li>	
 															{% endfor %}														
-														</ul>
-														
+														</ul>														
 														{% endfor %}
 													</div>
+
+													{% for item in cart %} 
+													<span id='qty-{{ item.fooditem.id }}' data-qty="{{ item.quantity }}" class='item_qty d-none'>{{ item.quantity }}</span>
+													{% endfor %}
+													<!--After this, write some javascript to push the quantity there-->
 													
 												</div>
 											</div>
