@@ -7,7 +7,7 @@ from .models import (
 
 # Register your models here.
 class CartAdmin(admin.ModelAdmin):
-    list_display = ['user', 'fooditem', 'quantity']
+    list_display = ['id','user', 'fooditem', 'quantity']
     
 admin.site.register(Cart, CartAdmin)
  

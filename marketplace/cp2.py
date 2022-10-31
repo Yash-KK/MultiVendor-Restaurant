@@ -17,3 +17,23 @@ def get_cart_count(request):
     return {
         'cart_count': cart_count
     }
+    
+def get_cart_amount(request):
+    total,sub_total,tax = 0,0,0
+    
+    try:
+        cart_items = Cart.objects.filter(user=request.user)
+        for item in cart_items:
+            sub_total += item.fooditem.price * item.quantity
+             
+    except:
+        cart_items = None 
+    
+    tax = (2*sub_total)/100  
+    total = tax + sub_total
+    
+    return {
+        'total': total,
+        'sub_total':sub_total,
+        'tax': tax
+    }    
