@@ -43,7 +43,7 @@ class FoodItem(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now_add=True)
     
-    class Meta:
+    class Meta:  
         verbose_name = 'Food Item'
         verbose_name_plural = 'Food Items'
         
