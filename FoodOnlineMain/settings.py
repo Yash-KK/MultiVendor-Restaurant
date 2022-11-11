@@ -70,6 +70,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'accounts.cp1.get_vendor',
+                'accounts.cp1.get_google_api',
                 'marketplace.cp2.get_cart_count',
                 'marketplace.cp2.get_cart_amount',
                 
@@ -164,3 +165,7 @@ EMAIL_PORT = config('EMAIL_PORT', cast=int)
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
+
+
+
+GOOGLE_API_KEY = config('GOOGLE_API_KEY')
