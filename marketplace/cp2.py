@@ -36,4 +36,4 @@ def get_cart_amount(request):
         'total': total,
         'sub_total':sub_total,
         'tax': tax
-    }    
+    }     

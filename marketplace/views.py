@@ -147,6 +147,10 @@ def delete_cart_item(request, cart_item_id=None):
         cart_item = Cart.objects.get(id=cart_item_id)
         cart_item.delete()
            
-        return JsonResponse({"success":"deleted the cart item", 'cart_item_id': cart_item_id, 'cart_counter': get_cart_count(request)})
+        return JsonResponse({"success":"deleted the cart item", 
+                             'cart_item_id': cart_item_id, 
+                             'cart_counter': get_cart_count(request),
+                             'cart_amount':get_cart_amount(request)}
+                            )
     else:
         return JsonResponse({"failure":"Invalid Request!"})
