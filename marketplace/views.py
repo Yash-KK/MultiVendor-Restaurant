@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import HttpResponse, render
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 #helper
 from .cp2 import (
     get_cart_amount,
@@ -29,6 +30,7 @@ def market_place(request):
     }
     return render(request, 'marketplace/listings.html',context)
 
+# @login_required(login_url='login-user')
 def vendor_detail(request, vendor_slug=None):
     vendor = Vendor.objects.get(vendor_slug=vendor_slug)    
     categories = Category.objects.filter(vendor=vendor)
@@ -44,6 +46,7 @@ def vendor_detail(request, vendor_slug=None):
     }
     return render(request, 'marketplace/vendor_detail.html', context)
 
+@login_required(login_url='login-user')
 def add_to_cart(request, food_id):  
    if request.user.is_authenticated:
        # check if the request is ajax
@@ -100,7 +103,7 @@ def add_to_cart(request, food_id):
        }
        return JsonResponse(data)
     
-
+@login_required(login_url='login-user')
 def decrease_cart(request, food_id):
     current_user = request.user
     if current_user.is_authenticated:
@@ -123,14 +126,13 @@ def decrease_cart(request, food_id):
                                          'message':'Deleted the cart item',
                                          'cart_counter': get_cart_count(request),
                                          'item_quantity':quantity,
-                                         'cart_amount': get_cart_amount(request)})
-   
+                                         'cart_amount': get_cart_amount(request)})   
             except:
                 pass
         except:
             return JsonResponse({"status":'Failed!', 'message':'Food item does not exist!'})
 
-    else:
+    else: 
         return JsonResponse({"status":'login_required', 'message':'Please login to continue'})
 
 @login_required(login_url='login-user')
@@ -141,7 +143,7 @@ def cart(request):
     }
     return render(request, 'marketplace/cart.html', context)
 
-
+@login_required(login_url='login-user')
 def delete_cart_item(request, cart_item_id=None):
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':  
         cart_item = Cart.objects.get(id=cart_item_id)
@@ -154,3 +156,26 @@ def delete_cart_item(request, cart_item_id=None):
                             )
     else:
         return JsonResponse({"failure":"Invalid Request!"})
+
+
+def search(request):    
+    keyword = request.GET['keyword']
+    radius = request.GET['radius']
+    food_items = FoodItem.objects.filter(food_title__icontains=keyword).values_list('vendor', flat=True)
+    
+    vendors = Vendor.objects.filter(
+        Q(id__in=food_items) | Q(vendor_name__icontains=keyword, user__is_active=True, is_approved=True)
+    )
+    
+    # vendors = Vendor.objects.filter(vendor_name__icontains=keyword, user__is_active=True, is_approved=True)
+    vendors_count = vendors.count()
+    
+    context  = {
+        'vendors':vendors,
+        'vendors_count': vendors_count
+    }
+            
+    return render(request, 'marketplace/listings.html', context)
+
+     
+     
