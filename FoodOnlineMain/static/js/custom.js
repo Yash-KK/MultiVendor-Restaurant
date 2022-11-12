@@ -204,10 +204,10 @@ $(document).ready(function (){
                     cc = res.cart_counter['cart_count'];
                     $('#cart_counter').html(cc);
 
-                    // // updating the total, sub_total, tax  
-                    // $('#subtotal').html(res.cart_amount['sub_total'])
-                    // $('#tax').html(res.cart_amount['tax'])
-                    // $('total').html(res.cart_amount['total'])
+                    // updating the total, sub_total, tax  
+                    $('#subtotal').html(res.cart_amount['sub_total'])
+                    $('#tax').html(res.cart_amount['tax'])
+                    $('total').html(res.cart_amount['total'])
                     
                 }
                 

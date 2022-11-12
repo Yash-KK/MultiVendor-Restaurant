@@ -38,8 +38,11 @@
 										<h2>Build Your Menu</h2>
 									</div>	
                                     <input class='btn btn-info' type="button" value="Back" onclick="history.back()">
+                                    
+                                    {% comment %} <a class='btn btn-success float-right m-1' href="{% url 'add-food-item'  %}"><i class="fa fa-plus" aria-hidden="true"></i> Add Food</a> {% endcomment %}
 
-                                    <hr>								
+                                    <hr>	
+                                    							
 									<h6>Category: <span class='category-name'> {{ category.category_name }}</span> </h6>									                                                       
                                    
                                     {% comment %} <a class='btn btn-info float-right m-1'  href="#"><i class="fa fa-plus" aria-hidden="true"></i> Add Category</a>
@@ -72,7 +75,7 @@
                                                     </div>
                                             {% endif %}
                                                 
-											                                     
+											                                      
                                         </tbody>
                                       </table>							
 								</div>

@@ -32,7 +32,7 @@
                                                 <li>
                                                     <div class="img-holder">
                                                         <figure>
-                                                            <a href="#">
+                                                            <a href="{% url 'vendor-detail' vendor.vendor_slug %}">
                                                                 {% if vendor.user_profile.profile_pic %}
                                                                     <img src="{{ vendor.user_profile.profile_pic.url }}" class="img-list wp-post-image" alt="">
                                                                 {% else %}
@@ -45,7 +45,7 @@
                                                     <div class="text-holder">                                                        
                                                         <div class="post-title">
                                                             <h5>
-                                                                <a href="listing-detail.html">{{ vendor.vendor_name }} </a>                                                                
+                                                                <a href="{% url 'vendor-detail' vendor.vendor_slug %}">{{ vendor.vendor_name }} </a>                                                                
                                                             </h5>
                                                         </div>
                                                         <span class="post-categories">

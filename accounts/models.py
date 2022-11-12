@@ -89,7 +89,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
     profile_pic = models.ImageField(upload_to='users/profie_pic', blank=True, null=True)
     cover_photo = models.ImageField(upload_to='users/cover_photo', blank=True, null=True)
-    address = models.CharField(max_length=100, blank=True, null=True)
+    address = models.CharField(max_length=255, blank=True, null=True)
         
     country = models.CharField(max_length=100, blank=True, null=True)
     state = models.CharField(max_length=100, blank=True, null=True)
