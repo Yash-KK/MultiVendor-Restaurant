@@ -80,3 +80,7 @@ def validate_file_extension(value):
     valid_extensions = ['.png','.jpg','.jpeg','.PNG','.JPG','.JPEG']
     if not ext in valid_extensions:
         raise ValidationError(u'Unsupported File extension. Allowed extension:' + str(valid_extensions))    
+    
+
+
+     

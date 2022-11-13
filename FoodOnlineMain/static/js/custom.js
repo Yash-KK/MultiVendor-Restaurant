@@ -226,6 +226,89 @@ $(document).ready(function (){
             }
         })
     })
-})
 
+    // ADD OPENING HOUR'S
+    $('.add_hours').click(function(e){
+        e.preventDefault();
+        let condition;
+
+        let day = document.getElementById('id_day').value
+        let from_hour = document.getElementById('id_from_hour').value
+        let to_hour = document.getElementById('id_to_hour').value
+        let is_closed = document.getElementById('id_is_closed').checked;
+        let csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value
+        let url = document.getElementById('add_hour_url').value;
+       
+        // alert("Added Hours")
+        if(is_closed){
+            condition = "day==''"            
+        } else{
+            condition = "day == '' || from_hour =='' || to_hour == ''"
+        }
+        
+        if(eval(condition)){
+            // fill out the entries
+            swal("Fill out Entries", "", "info");   
+            $("#opening_hours").trigger("reset");                      
+        } else{
+            // send data to frontend
+            $.ajax({
+                type:"POST",
+                url:url,
+                data: {
+                    'day': day,
+                    'from_hour': from_hour,
+                    'to_hour':to_hour,
+                    'is_closed':is_closed,
+                    'csrfmiddlewaretoken':csrf_token
+                },
+                success: function(res){
+                    if(res.success){
+                        if(res.is_closed){
+                            let html = '<tr id="hour-'+ res.id +'" ><td> <b> '+ res.day +' </b> </td>   <td> Closed </td>   <td> <a href="#"  class="remove_add_hours" data_url="/vendor/remove-opening-hours/'+ res.id +'/" >Remove</a> </td> </tr>'
+                            $('.opening_hours').append(html);
+                        } else{
+                            let html = '<tr id="hour-'+ res.id +'" ><td> <b> '+ res.day +' </b> </td>   <td> '+ res.from_hour +' - '+ res.to_hour +'  </td>   <td> <a href="#" class="remove_add_hours" data_url="/vendor/remove-opening-hours/'+ res.id +'/" >Remove</a> </td> </tr>'
+                            $('.opening_hours').append(html);
+                        }
+
+                        $('.opening_hours').trigger("reset");
+                        $("#opening_hours").trigger("reset");
+                        console.log(res);                       
+                    } else if (res.failure){
+                       
+                        swal(res.failure, '', 'warning');
+                       
+                        $("#opening_hours").trigger("reset");
+                    }
+                   
+                    
+                } 
+
+            })
+
+        }
+    });
+
+     // REMOVE ADD HOURS  
+    
+    $(document).on('click', '.remove_add_hours', function(e){
+        e.preventDefault();
+        let url = $(this).attr('data_url');       
+        console.log(url);
+
+        $.ajax({
+            'type':'GET',
+            'url': url,
+            'success': function(res){
+                if(res.success){
+                    // delete the <tr> id
+                    $('#hour-'+ res.hour_id).remove();
+                }
+            }
+        })
+    })
+
+    // close document ready
+})
 

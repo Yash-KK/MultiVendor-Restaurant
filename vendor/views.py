@@ -1,9 +1,9 @@
-from unicodedata import category
-from django.shortcuts import HttpResponse, redirect, render
+from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.template.defaultfilters import slugify
-
+from django.http import JsonResponse
+from django.db import IntegrityError
 #UTILS
 from .utils import get_vendor
 # VIEWS
@@ -19,10 +19,14 @@ from menu.forms import (
     CategoryForm,
     FoodItemForm
 )
+from .forms import (
+    OpeningHourForm
+)
 
 #MODELS
 from .models import (
-    Vendor
+    Vendor,
+    OpeningHour
 )
 from accounts.models import (
     UserProfile
@@ -220,3 +224,92 @@ def edit_food_item(request, slug=None):
         'form':form
     }
     return render(request, 'vendor/edit_food_item.html',context)
+
+
+
+
+# opening hours
+def opening_hours(request):
+    opening_hours = OpeningHour.objects.filter(vendor=get_vendor(request))
+    form = OpeningHourForm()
+    
+    context = {
+        'opening_hours': opening_hours,
+        'form': form
+    }
+    return render(request, 'vendor/opening_hours.html', context)
+
+def add_hours(request):    
+    if request.user.is_authenticated:
+        if  request.headers.get('x-requested-with') == 'XMLHttpRequest' and request.method == 'POST':
+            day = request.POST['day']
+            from_hour = request.POST['from_hour']
+            to_hour = request.POST['to_hour']
+            is_closed = request.POST['is_closed']
+            print(is_closed)
+            if is_closed == 'false':
+                is_closed = False
+            else:
+                is_closed = True    
+                
+            print(day, from_hour, to_hour, is_closed)
+            # add the data into the database
+            try:
+                instance = OpeningHour.objects.create(vendor=get_vendor(request), day=day, from_hour=from_hour, to_hour=to_hour, is_closed=is_closed)
+                instance.save()
+                
+                if instance:
+                    get_instance = OpeningHour.objects.get(id=instance.id)
+                    print(get_instance)
+                    if get_instance.is_closed:    # if true
+                        data = {
+                            'success': "Model instance created. It is closed",
+                            'day': get_instance.get_day_display(),   
+                            'is_closed': get_instance.is_closed,
+                            'id': get_instance.pk                      
+                        }
+                        return JsonResponse(data)
+                    else: # if false                        
+                        data = {
+                            'success': "Model Instance created. Not Closed",
+                            'day': get_instance.get_day_display(),
+                            'from_hour': get_instance.from_hour,
+                            'to_hour': get_instance.to_hour,
+                            'is_closed': get_instance.is_closed,
+                            'id': get_instance.pk  
+                        }
+                        return JsonResponse(data)
+        
+            except IntegrityError as e :
+                return JsonResponse({
+                    'failure': f"Hours from {from_hour} - {to_hour} on this day exists!",
+                    'error' :str(e)
+                })           
+        else:
+            data = {
+                'failure': "Not an Ajax Request"
+            }
+            return JsonResponse(data)
+            
+    else:
+        data = {
+            'failure': "Please Login to Contienue"
+        }
+        return JsonResponse(data)
+    
+    
+
+def remove_add_hours(request, pk=None):
+    if  request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        # query the hour instance and delete it
+        hour = OpeningHour.objects.get(pk=pk)
+        hour.delete()
+        return JsonResponse({
+            'success': 'Deleted Successfully!',
+            'hour_id': pk
+        })
+    else:        
+        return JsonResponse({
+            'failure':'Not an Ajax Request',
+            
+        })
