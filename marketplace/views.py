@@ -2,15 +2,23 @@ from django.http import JsonResponse
 from django.shortcuts import HttpResponse, render
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+
+from datetime import date
+
+
 #helper
 from .cp2 import (
     get_cart_amount,
     get_cart_count
 )
+from vendor.utils import (
+    get_vendor
+)
 
 #MODELS
 from vendor.models import (
-    Vendor
+    Vendor,
+    OpeningHour
 )
 from menu.models import (
     Category,
@@ -19,6 +27,7 @@ from menu.models import (
 from marketplace.models import (
     Cart
 )
+
 # Create your views here.
 
 def market_place(request):
@@ -35,6 +44,13 @@ def vendor_detail(request, vendor_slug=None):
     vendor = Vendor.objects.get(vendor_slug=vendor_slug)    
     categories = Category.objects.filter(vendor=vendor)
     
+    opening_hours = OpeningHour.objects.filter(vendor=vendor)
+   
+    
+    today = date.today()
+    current_day = today.isoweekday()
+    current_day_oh = OpeningHour.objects.filter(vendor=vendor, day=current_day)
+    print(current_day_oh)
     if request.user.is_authenticated:        
         cart = Cart.objects.filter(user=request.user)
     else:
@@ -42,7 +58,9 @@ def vendor_detail(request, vendor_slug=None):
     context = {
         'vendor': vendor,
         'categories': categories,
-        'cart': cart
+        'cart': cart,
+        'opening_hours': opening_hours,
+        'current_day_oh': current_day_oh
     }
     return render(request, 'marketplace/vendor_detail.html', context)
 
