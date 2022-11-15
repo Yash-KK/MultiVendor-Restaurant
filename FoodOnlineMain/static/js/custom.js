@@ -108,9 +108,18 @@ $(document).ready(function(){
 
                 
                 // update the total, sub_total, tax 
-                $('#subtotal').html(res.cart_amount['sub_total'])
-               
+                $('#subtotal').html(res.cart_amount['sub_total'])                
                 $('#total').html(res.cart_amount['total'])
+
+                // fetching the value from tax dict and updating 
+                let tax_dictionary = res.cart_amount['tax_dict']
+                console.log(tax_dictionary);
+               for(let key in tax_dictionary){                    
+                    for(let key2 in tax_dictionary[key]){
+                        let tax_amt = tax_dictionary[key][key2];
+                        $('#tax-'+ key).html(tax_amt);
+                    }
+               }
                 
             }
         })
@@ -156,9 +165,18 @@ $(document).ready(function(){
 
                 
                 // update the total, sub_total, tax 
-                $('#subtotal').html(res.cart_amount['sub_total'])
-               
+                $('#subtotal').html(res.cart_amount['sub_total'])               
                 $('#total').html(res.cart_amount['total'])
+
+                // fetching the value from tax dict and updating 
+                let tax_dictionary = res.cart_amount['tax_dict']
+                console.log(tax_dictionary);
+               for(let key in tax_dictionary){                    
+                    for(let key2 in tax_dictionary[key]){
+                        let tax_amt = tax_dictionary[key][key2];
+                        $('#tax-'+ key).html(tax_amt);
+                    }
+               }
                 
                 // if item quantity == 0: delete the cart item only on the cart page
                 if(window.location.pathname =='/cart/'){
@@ -205,9 +223,17 @@ $(document).ready(function (){
                     $('#cart_counter').html(cc);
 
                     // updating the total, sub_total, tax  
-                    $('#subtotal').html(res.cart_amount['sub_total'])
-                    
+                    $('#subtotal').html(res.cart_amount['sub_total'])                    
                     $('total').html(res.cart_amount['total'])
+                      // fetching the value from tax dict and updating 
+                    let tax_dictionary = res.cart_amount['tax_dict']
+                    console.log(tax_dictionary);
+                    for(let key in tax_dictionary){                    
+                            for(let key2 in tax_dictionary[key]){
+                                let tax_amt = tax_dictionary[key][key2];
+                                $('#tax-'+ key).html(tax_amt);
+                            }
+                    }
                     
                 }
                 
@@ -218,10 +244,18 @@ $(document).ready(function (){
                     $('#to-hide').hide()
                     
                     // if cart count after deleting is 0. Set the total, tax, subtotal to 0
-                    $("#subtotal").html(0);
-                    
+                    $("#subtotal").html(0);                    
                     $('#total').html(0);
+                      // fetching the value from tax dict and updating 
+                    let tax_dictionary = res.cart_amount['tax_dict']
+                    console.log(tax_dictionary);
+                for(let key in tax_dictionary){                    
+                        for(let key2 in tax_dictionary[key]){
+                            let tax_amt = tax_dictionary[key][key2];
+                            $('#tax-'+ key).html(tax_amt);
+                        }
                 }
+                    }
                
             }
         })
