@@ -33,7 +33,9 @@ urlpatterns = [
     path('', views.home, name='home'),
     
     path('cart/', marketplace_views.cart, name='cart'),
-    path('search/', marketplace_views.search, name='search')
+    path('search/', marketplace_views.search, name='search'),
+    
+    path('customers/', include("customers.urls"))
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

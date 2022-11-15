@@ -31,6 +31,12 @@ class UserForm(forms.ModelForm):
                 "password and confirm_password does not match"
             )    
 
+class UserFormCustomer(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'phone_number']
+        
+
 class UserProfileForm(forms.ModelForm):
     profile_pic = forms.FileField(widget=forms.FileInput(attrs={'class':'btn btn-info'}), validators=[validate_file_extension])
     cover_photo = forms.FileField(widget=forms.FileInput(attrs={'class':'btn btn-info'}),validators=[validate_file_extension])
