@@ -8,7 +8,8 @@ from vendor.models import (
 
 #create your views here
 def home(request):
-    vendors = Vendor.objects.filter(user__is_active=True, is_approved=True)[:8]
+    vendors = Vendor.objects.filter(user__is_active=True, is_approved=True).order_by('created_at')[:8]
+    
     context = {
         'vendors':vendors
     }

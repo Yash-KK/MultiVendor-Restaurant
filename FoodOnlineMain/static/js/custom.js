@@ -109,7 +109,7 @@ $(document).ready(function(){
                 
                 // update the total, sub_total, tax 
                 $('#subtotal').html(res.cart_amount['sub_total'])
-                $('#tax').html(res.cart_amount['tax'])
+               
                 $('#total').html(res.cart_amount['total'])
                 
             }
@@ -157,7 +157,7 @@ $(document).ready(function(){
                 
                 // update the total, sub_total, tax 
                 $('#subtotal').html(res.cart_amount['sub_total'])
-                $('#tax').html(res.cart_amount['tax'])
+               
                 $('#total').html(res.cart_amount['total'])
                 
                 // if item quantity == 0: delete the cart item only on the cart page
@@ -206,7 +206,7 @@ $(document).ready(function (){
 
                     // updating the total, sub_total, tax  
                     $('#subtotal').html(res.cart_amount['sub_total'])
-                    $('#tax').html(res.cart_amount['tax'])
+                    
                     $('total').html(res.cart_amount['total'])
                     
                 }
@@ -219,7 +219,7 @@ $(document).ready(function (){
                     
                     // if cart count after deleting is 0. Set the total, tax, subtotal to 0
                     $("#subtotal").html(0);
-                    $('#tax').html(0);
+                    
                     $('#total').html(0);
                 }
                
