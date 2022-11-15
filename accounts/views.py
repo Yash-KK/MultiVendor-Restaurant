@@ -225,7 +225,7 @@ def reset_password(request):
 @user_passes_test(if_customer_user)
 def customer_dashboard(request):
     return render(request, 'accounts/cDashboard.html')
-
+ 
 @login_required(login_url='login-user')
 @user_passes_test(if_vendor_user)
 def vendor_dashboard(request):   
