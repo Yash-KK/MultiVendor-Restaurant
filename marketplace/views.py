@@ -184,7 +184,7 @@ def delete_cart_item(request, cart_item_id=None):
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':  
         cart_item = Cart.objects.get(id=cart_item_id)
         cart_item.delete()
-           
+            
         return JsonResponse({"success":"deleted the cart item", 
                              'cart_item_id': cart_item_id, 
                              'cart_counter': get_cart_count(request),
