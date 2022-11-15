@@ -3,7 +3,7 @@ from django.shortcuts import HttpResponse, render
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
-from datetime import date
+from datetime import date, datetime
 
 
 #helper
@@ -31,7 +31,7 @@ from marketplace.models import (
 # Create your views here.
 
 def market_place(request):
-    vendors = Vendor.objects.all().order_by('-created_at')
+    vendors = Vendor.objects.all().order_by('created_at')
     vendors_count = vendors.count()
     context = {
         'vendors': vendors,
@@ -44,13 +44,29 @@ def vendor_detail(request, vendor_slug=None):
     vendor = Vendor.objects.get(vendor_slug=vendor_slug)    
     categories = Category.objects.filter(vendor=vendor)
     
-    opening_hours = OpeningHour.objects.filter(vendor=vendor)
-   
+    opening_hours = OpeningHour.objects.filter(vendor=vendor)     
     
     today = date.today()
     current_day = today.isoweekday()
     current_day_oh = OpeningHour.objects.filter(vendor=vendor, day=current_day)
-    print(current_day_oh)
+    
+    # # fetching the current date and time
+    # now = datetime.now()    
+    # current_time = now.strftime("%H:%M:%S")
+       
+    # is_open = None
+    # for i in current_day_oh:
+    #     start = str(datetime.strptime(i.from_hour, '%I:%M %p').time())
+    #     end = str(datetime.strptime(i.to_hour, '%I:%M %p').time())
+    #     print(start,end)
+        
+    #     if current_time > start and current_time < end:
+    #         is_open = True
+    #         break
+    #     else:
+    #         is_open = False
+            
+ 
     if request.user.is_authenticated:        
         cart = Cart.objects.filter(user=request.user)
     else:
@@ -60,7 +76,9 @@ def vendor_detail(request, vendor_slug=None):
         'categories': categories,
         'cart': cart,
         'opening_hours': opening_hours,
-        'current_day_oh': current_day_oh
+        'current_day_oh': current_day_oh,
+        
+        
     }
     return render(request, 'marketplace/vendor_detail.html', context)
 

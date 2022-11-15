@@ -1,5 +1,5 @@
 from django.db import models
-from datetime import time
+from datetime import time, datetime, date
 
 #Helper
 from accounts.utils import (
@@ -27,6 +27,28 @@ class Vendor(models.Model):
     
     def __str__(self):
         return f"{self.vendor_name}"
+    
+    def is_open(self):
+        
+        today = date.today()
+        current_day = today.isoweekday()
+        now = datetime.now()    
+        current_time = now.strftime("%H:%M:%S")
+        current_day_oh = OpeningHour.objects.filter(vendor=self, day=current_day)
+
+        is_open = None
+        for i in current_day_oh:
+            start = str(datetime.strptime(i.from_hour, '%I:%M %p').time())
+            end = str(datetime.strptime(i.to_hour, '%I:%M %p').time())
+           
+            
+            if current_time > start and current_time < end:
+                is_open = True
+                break
+            else:
+                is_open = False
+        
+        return is_open
     
     def save(self, *args, **kwargs):
         # fetch the user using self.pk

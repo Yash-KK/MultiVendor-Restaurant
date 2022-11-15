@@ -29,7 +29,7 @@ def get_cart_amount(request):
     except:
         cart_items = None 
     
-    tax = (2*sub_total)/100  
+     
     total = tax + sub_total
     
     return {
