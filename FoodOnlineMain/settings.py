@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'vendor',
     'menu',
     'marketplace',
-    'customers'
+    'customers',
+    'orders'
 ]
 
 MIDDLEWARE = [
@@ -171,4 +172,7 @@ EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
 
 
 
+#PI KEYS
 GOOGLE_API_KEY = config('GOOGLE_API_KEY')
+KEY_ID = config('KEY_ID')
+KEY_SECRET = config('KEY_SECRET')
