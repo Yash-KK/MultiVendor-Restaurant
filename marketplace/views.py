@@ -15,6 +15,11 @@ from vendor.utils import (
     get_vendor
 )
 
+#FORMS
+from orders.forms import (
+    OrderForm
+)
+
 #MODELS
 from vendor.models import (
     Vendor,
@@ -27,7 +32,9 @@ from menu.models import (
 from marketplace.models import (
     Cart
 )
-
+from accounts.models import (
+    UserProfile
+)
 # Create your views here.
 
 def market_place(request):
@@ -213,5 +220,30 @@ def search(request):
             
     return render(request, 'marketplace/listings.html', context)
 
-     
-     
+
+@login_required(login_url='login-user')
+def checkout(request):
+    cart_items = Cart.objects.filter(user=request.user)
+    user_profile = UserProfile.objects.get(user=request.user)    
+    
+    data = {
+        'first_name': request.user.first_name,
+        'last_name': request.user.last_name,
+        'phone': request.user.phone_number,
+        'email': request.user.email,
+        
+        'address': user_profile.address ,
+        
+        'country': user_profile.country,
+        'state': user_profile.state,
+        'city': user_profile.city,
+        'pin_code': user_profile.pincode,
+        
+    }
+    form = OrderForm(initial=data)
+    context = {
+        'cart_items': cart_items,
+        'form':form
+    }
+    return render(request, 'marketplace/checkout.html', context)
+

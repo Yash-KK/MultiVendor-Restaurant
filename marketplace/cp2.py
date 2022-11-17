@@ -47,6 +47,6 @@ def get_cart_amount(request):
     return {
         'total': total,
         'sub_total':sub_total,
-        'tax': tax,
+        'tax': tax_sum,
         'tax_dict': tax_dict
     }     

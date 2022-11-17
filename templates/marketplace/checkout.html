@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block 'title' %}
+    Cart
+{% endblock 'title' %}
+    
+
+
+{% block 'content' %}
+    <!-- Main Section Start -->
+			<div class="main-section">
+				
+				<div class="page-section">
+					<div class="container pt-5">
+						<div class="row">
+							
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+								<div class="tabs-holder horizontal">									
+							
+									<ul class="stickynav-tabs nav nav-tabs">
+										<li id='to-hide' class="active"><a data-toggle="tab" href="#home"><i class="icon- icon-shopping_cart"></i>Billing Address</a></li>
+										
+									</ul>							
+								
+										<div class="tab-content">
+											<div id="home" class="tab-pane in active">
+												<div class="menu-itam-holder">			
+                                                    <form style='padding-bottom: 20px;' action="{% url 'place-order' %}" method='POST'>
+                                                        {% csrf_token %}
+                                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                            {% comment %} <div class="field-holder"> {% endcomment %}
+                                                                <label>First Name</label>
+                                                                {{ form.first_name }}
+                                                            {% comment %} </div> {% endcomment %}
+                                                        </div>                                                   
+                                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                            {% comment %} <div class="field-holder"> {% endcomment %}
+                                                                <label>Last Name</label>
+                                                                {{ form.last_name }}
+                                                            {% comment %} </div> {% endcomment %}
+                                                        </div>
+    
+                                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                            {% comment %} <div class="field-holder"> {% endcomment %}
+                                                                <label>Phone</label>
+                                                                {{ form.phone }}
+                                                            {% comment %} </div> {% endcomment %}
+                                                        </div>
+                                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                            {% comment %} <div class="field-holder"> {% endcomment %}
+                                                                <label>Email</label>
+                                                                {{ form.email }}
+                                                            {% comment %} </div> {% endcomment %}
+                                                        </div>
+    
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            {% comment %} <div class="field-holder"> {% endcomment %}
+                                                                <label>Address</label>
+                                                                {{ form.address }}
+                                                            {% comment %} </div> {% endcomment %}
+                                                        </div>
+    
+                                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                            {% comment %} <div class="field-holder"> {% endcomment %}
+                                                                <label>Country</label>
+                                                                {{ form.country }}
+                                                            {% comment %} </div> {% endcomment %}
+                                                        </div>
+    
+                                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                            {% comment %} <div class="field-holder"> {% endcomment %}
+                                                                <label>State</label>
+                                                                {{ form.state }}
+                                                            {% comment %} </div> {% endcomment %}
+                                                        </div>
+                                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                            {% comment %} <div class="field-holder"> {% endcomment %}
+                                                                <label>City</label>
+                                                                {{ form.city }}
+                                                            {% comment %} </div> {% endcomment %}
+                                                        </div>
+                                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                            {% comment %} <div class="field-holder"> {% endcomment %}
+                                                                <label>Pincode</label>
+                                                                {{ form.pin_code }}
+                                                            {% comment %} </div> {% endcomment %}
+                                                        </div>
+    
+                                                    									
+													
+												</div>
+											</div>
+											
+										</div>
+									
+								</div>
+							</div>
+							
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+								<div class="tabs-holder horizontal">
+									<ul class="stickynav-tabs nav nav-tabs">
+										<li class="active"><a data-toggle="tab" href="#home"><i class="icon- icon-room_service"></i>Your Orders</a></li>
+										
+									</ul>
+									<div class="tab-content">
+										<div id="home" class="tab-pane in active">
+											<div class="menu-itam-holder">
+												<div id="menu-item-list-6272" class="menu-itam-list">
+														
+														
+                                                    <div class="element-title" id="menu-category-2">
+                                                        
+                                                        <ul>
+                                                            {% for item in cart_items %}
+                                                                <li id='itemId-{{ item.id }}' >
+                                                                    <div class="image-holder"> <a href="#"><img src="{{ item.fooditem.image.url }}" alt=""></a></div>
+                                                                    <div class="text-holder">
+                                                                        <h6>{{ item.fooditem.food_title }}</h6>
+                                                                        <span>{{ item.fooditem.description }} </span>
+                                                                        <a class='badge badge-warning' href="{% url 'vendor-detail' item.fooditem.vendor.vendor_slug %}">{{ item.fooditem.vendor.vendor_name }}</a>
+                                                                    </div>
+                                                                    
+                                                                    <div class="price-holder">
+                                                                        <span class="price">${{ item.fooditem.price }}</span>
+                                                                        <label style='padding-top: 10px; padding-right: 0px; padding-left: 15px;' id='qty-{{ item.fooditem.id }}'>{{ item.quantity }}</label>																
+                                                                    </div>
+                                                                </li>	
+                                                            {% endfor %}														
+                                                        </ul>														
+                                                        
+                                                    </div>
+
+                                                    
+                                                    
+                                                </div>
+												<div>
+													<ul>
+														<li style='list-style-type:none;'>
+															<strong>Subtotal</strong>
+															<span class='price float-right'>
+																<span class='currency'>$</span>
+																<span id='subtotal'>{{ sub_total }}</span>		
+															</span>
+														</li>
+														{% for key, value in tax_dict.items %}
+																{% for i,j in value.items %}
+														<li style='list-style-type:none;'>
+															
+																	<strong>{{ key }}</strong>
+																	<span class='price float-right'>
+																		<span class='currency'>$</span>
+																		<span id='tax-{{ key }}'>{{ j }}</span>		
+																	</span>
+																 
+														</li>
+														{% endfor %}	
+															{% endfor %}	
+														<li style='list-style-type:none;'>
+															<strong>TOTAL</strong>
+															<span class='price float-right'>
+																<span class='currency'>$</span>
+																<span id='total'>{{ total }}</span>		
+															</span>
+														</li>
+													</ul>
+
+                                                    <!--Payment Methods-->
+                                                    <h5>SELECT PAYMENT METHOD</h5>
+                                                    <div class='payment-method'>
+                                                        {% comment %} <label style='margin-right: 20px;'>
+                                                            <input type="radio" name='payment_method' value='PayPal'>
+                                                            <img src="{% static 'images/PayPal.png' %}" alt="PayPal" width='100'>
+                                                        </label> {% endcomment %}
+                                                        
+                                                        <label for="">
+                                                            <input type="radio" id='payment_method' name='payment_method' value='RazorPay'>
+                                                            <img src="{% static 'images/razorpay_logo.png' %}" alt="RazorPay"  width='100'>
+                                                        </label>
+                                                    </div>
+													<button class='btn btn-danger container-fluid'>PLACE ORDER</button>
+                                                </form>	
+												</div>
+												
+											</div>
+										</div>
+										
+									</div>
+								</div>
+							</div>
+						</div>
+                        
+					</div>
+				</div>
+			</div>
+			<!-- Main Section End -->
+       
+{% endblock 'content' %}
+    
