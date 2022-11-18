@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from django.shortcuts import HttpResponse, render
+from django.shortcuts import HttpResponse, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
@@ -225,7 +225,8 @@ def search(request):
 def checkout(request):
     cart_items = Cart.objects.filter(user=request.user)
     user_profile = UserProfile.objects.get(user=request.user)    
-    
+    if cart_items.count() <= 0:
+        return redirect('market-place')
     data = {
         'first_name': request.user.first_name,
         'last_name': request.user.last_name,
