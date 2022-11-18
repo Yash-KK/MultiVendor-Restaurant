@@ -71,6 +71,22 @@ def vendor_is_not_approved_mail(user):
     mail = EmailMessage(mail_subject, message, to=[to_email])
     mail.send()
 
+def order_confirmed_email(user, email,order_number, trans_id):
+    # current_site = get_current_site(request)
+    mail_subject = 'Ordered Confirmed'
+    message = render_to_string('orders/emails/order_confirmed.html',{
+        'user':user,
+        # 'domain': current_site,
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        'token': default_token_generator.make_token(user),
+        
+        'order_number': order_number,
+        'trans_id': trans_id
+        
+    })
+    to_email = email
+    mail = EmailMessage(mail_subject, message, to=[to_email])
+    mail.send()
     
     
     
