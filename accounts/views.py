@@ -27,6 +27,10 @@ from vendor.models import (
     Vendor
 )
 
+from orders.models import (
+    Order
+)
+
 # Create your views here.
 def if_customer_user(user):
     if user.role == 2:
@@ -224,7 +228,15 @@ def reset_password(request):
 @login_required(login_url='login-user')
 @user_passes_test(if_customer_user)
 def customer_dashboard(request):
-    return render(request, 'accounts/cDashboard.html')
+    orders = Order.objects.filter(user=request.user, is_ordered=True).order_by('-created_at')
+    count = orders.count()
+    recent_orders = orders[:5]
+    context = {
+        'orders': recent_orders,
+        'count': count
+    }
+    return render(request, 'accounts/cDashboard.html', context)
+
  
 @login_required(login_url='login-user')
 @user_passes_test(if_vendor_user)

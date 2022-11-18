@@ -1,5 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+import simplejson as json
+
 #FORMS
 from accounts.forms import (
     UserFormCustomer,
@@ -10,6 +13,11 @@ from accounts.models import (
     User,
     UserProfile
 )
+from orders.models import (
+    Order,
+    OrderedFood
+)
+
 # Create your views here.
 def cprofile(request):    
     user = User.objects.get(email=request.user)
@@ -39,4 +47,28 @@ def cprofile(request):
     }
     return render(request, 'customers/cprofile.html', context)
 
+@login_required(login_url='login-user')
+def my_orders(request):
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')    
+    context = {
+        'orders': orders
+    }
+    return render(request, 'customers/my_orders.html', context)
 
+@login_required(login_url='login-user')
+def order_detail(request, id):
+    order_detail = Order.objects.get(order_number=id)
+    ordered_food = OrderedFood.objects.filter(order=order_detail)
+    sub_total = 0 
+    for item in ordered_food:
+        sub_total += item.amount
+    tax_data = json.loads(order_detail.tax_data)
+    context = {
+        'order': order_detail,
+        # 'trans_id': trans_id,
+        'ordered_food': ordered_food,
+        'tax_data': tax_data,
+        
+        'sub_total': sub_total
+    }
+    return render(request, 'customers/order_detail.html', context)
