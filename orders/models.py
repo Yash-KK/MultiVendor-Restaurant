@@ -2,6 +2,10 @@ from django.db import models
 from accounts.models import User
 from menu.models import FoodItem
 
+#MODEL
+from vendor.models import (
+    Vendor
+)
 
 class Payment(models.Model):
     PAYMENT_METHOD = (
@@ -30,6 +34,7 @@ class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     payment = models.ForeignKey(Payment, on_delete=models.SET_NULL, blank=True, null=True)
     order_number = models.CharField(max_length=20)
+    vendors = models.ManyToManyField(Vendor, blank=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     phone = models.CharField(max_length=15, blank=True)
@@ -40,7 +45,8 @@ class Order(models.Model):
     city = models.CharField(max_length=50)
     pin_code = models.CharField(max_length=10)
     total = models.FloatField()
-    tax_data = models.JSONField(blank=True, help_text = "Data format: {'tax_type':{'tax_percentage':'tax_amount'}}")
+    tax_data = models.JSONField(blank=True, help_text = "Data format: {'tax_type':{'tax_percentage':'tax_amount'}}", null=True)
+    total_data = models.JSONField(blank=True, null=True)
     total_tax = models.FloatField()
     payment_method = models.CharField(max_length=25)
     status = models.CharField(max_length=15, choices=STATUS, default='New')
@@ -56,6 +62,8 @@ class Order(models.Model):
     def __str__(self):
         return self.order_number
 
+    def order_placed_to(self):
+        return ','.join([str(i) for i in self.vendors.all()])
 
 class OrderedFood(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
@@ -68,6 +76,8 @@ class OrderedFood(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
+    def vendor(self):
+        return f"{self.fooditem.vendor}"
     
         
     def __str__(self):

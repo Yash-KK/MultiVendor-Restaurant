@@ -4,12 +4,15 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.template.defaultfilters import slugify
 from django.http import JsonResponse
 from django.db import IntegrityError
+
 #UTILS
 from .utils import get_vendor
+
 # VIEWS
 from accounts.views import (
     if_vendor_user
 )
+
 #FORMS
 from accounts.forms import (
     VendorForm,
@@ -35,7 +38,11 @@ from menu.models import (
     Category,
     FoodItem
 )
- 
+from orders.models import (
+    Order,
+    OrderedFood
+) 
+
 # Create your views here.
 @login_required(login_url='login-user')
 @user_passes_test(if_vendor_user)
@@ -313,3 +320,14 @@ def remove_add_hours(request, pk=None):
             'failure':'Not an Ajax Request',
             
         })
+
+
+def vendor_order_detail(request, order_number):
+    order = Order.objects.get(order_number=order_number, is_ordered=True)
+    ordered_food = OrderedFood.objects.filter(order=order, fooditem__vendor=get_vendor(request))
+    
+    context = {
+        'order': order,
+        'ordered_food': ordered_food
+    }
+    return render(request, 'vendor/vo_detail.html', context)
