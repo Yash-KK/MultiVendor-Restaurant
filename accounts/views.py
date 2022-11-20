@@ -237,9 +237,18 @@ def customer_dashboard(request):
     }
     return render(request, 'accounts/cDashboard.html', context)
 
- 
+  
 @login_required(login_url='login-user')
 @user_passes_test(if_vendor_user)
 def vendor_dashboard(request):   
-    return render(request, 'accounts/vDashboard.html')
+    vendor = Vendor.objects.get(user=request.user)
+    orders = Order.objects.filter(vendors__in=[vendor], is_ordered=True)
+    
+    context = {
+        'orders': orders,
+        'count': orders.count()
+    }
+    
+    return render(request, 'accounts/vDashboard.html', context)
+
  

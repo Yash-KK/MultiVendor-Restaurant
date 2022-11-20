@@ -22,12 +22,22 @@ def generate_order_number(pk):
 
 # MODELS
 from marketplace.models import (
-    Cart
+    Cart,
+    Tax,
+    
 )
 from .models import (
     Order,
     Payment,
-    OrderedFood
+    OrderedFood,
+    
+)
+from menu.models import (
+    FoodItem,
+    Category
+)
+from vendor.models import (
+    Vendor
 )
 
 #FORMS
@@ -46,6 +56,42 @@ def place_order(request):
     cart_items_count = cart_items.count()       
     if cart_items_count <=0:
         return redirect('market-place')
+    
+    vendor_ids = []
+    for item in cart_items:
+        v_id = item.fooditem.vendor.id
+        if v_id not in vendor_ids:
+            vendor_ids.append(v_id)
+
+    get_tax = Tax.objects.filter(is_active=True)
+    subtotal = 0
+    total_data = {}
+    k = {}
+    
+    for i in cart_items:
+        
+        fooditem = FoodItem.objects.get(pk=i.fooditem.id, vendor_id__in=vendor_ids)
+        v_id = fooditem.vendor.id
+        
+        if v_id in k:
+            subtotal = k[v_id]
+            subtotal += (fooditem.price * i.quantity)
+            k[v_id] = subtotal
+        else:
+            subtotal = (fooditem.price * i.quantity)
+            k[v_id] = subtotal
+    
+        # calculate the tax_data
+        tax_dict = {}
+        for i in get_tax:
+            tax_type = i.tax_type
+            tax_percentage = i.tax_percentage
+            tax_amount = round((tax_percentage*subtotal)/100,2)
+            tax_dict.update({tax_type:{str(tax_percentage): tax_amount}})
+        
+        # construct total data
+        total_data.update({fooditem.vendor.id : {str(subtotal): str(tax_dict)}})                
+    
     
     cart_amount = get_cart_amount(request)
     total = cart_amount['total']
@@ -73,11 +119,13 @@ def place_order(request):
             order.total = total
             order.total_tax = tax
             order.tax_data = json.dumps(tax_dict)
-            order.payment_method = request.POST['payment_method']
-            order.order_number = '123'
-            order.save()
+            order.total_data = json.dumps(total_data)
             
+            order.payment_method = request.POST['payment_method']
+            order.order_number = '123'           
+            order.save()            
             order.order_number = generate_order_number(order.id)
+            order.vendors.add(*vendor_ids)
             order.save()
             
             # Razorpay related
