@@ -6,6 +6,8 @@ from django.core.exceptions import PermissionDenied
 from django.template.defaultfilters import slugify
 from django.utils.http import urlsafe_base64_decode
 from django.contrib.auth.tokens import default_token_generator
+from datetime import datetime
+
 # Helper functions
 from .utils import (
     detect_user,  
@@ -244,8 +246,23 @@ def vendor_dashboard(request):
     vendor = Vendor.objects.get(user=request.user)
     orders = Order.objects.filter(vendors__in=[vendor], is_ordered=True)
     
+    # fetching the current month's revenue
+    currentMonth_revenue = 0
+    currentMonth = datetime.now().month
+    currentMonth_orders = Order.objects.filter(vendors__in=[vendor], is_ordered=True, created_at__month=currentMonth)
+    for i in currentMonth_orders:
+        currentMonth_revenue += i.get_total_by_vendor()['grand_total']
+    
+    total_revenue = 0
+    for i in orders:
+        total_revenue += i.get_total_by_vendor()['grand_total']
+    print(total_revenue)
+    
+    
     context = {
         'orders': orders,
+        'total_revenue':round(total_revenue,2), 
+        'currentMonth_revenue':round(currentMonth_revenue,2),
         'count': orders.count()
     }
     

@@ -101,7 +101,8 @@
                                                                     TOTAL
                                                                     <span class="price float-right">
                                                                         <span class="currency">$</span>
-                                                                        <span id="total">{{ order.total }}</span>
+                                                                        {% comment %} <span id="total">{{ order.total }}</span> {% endcomment %}
+                                                                        <span id="total">{{ order.get_total_by_vendor.grand_total }}</span>
                                                                     </span>
                                                                 </li>
                                                             </ul>

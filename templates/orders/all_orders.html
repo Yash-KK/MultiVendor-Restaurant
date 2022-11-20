@@ -1,70 +1,32 @@
 {% extends 'base.html' %}
-{% load static %}
-{% block 'title' %}
-    Vendor Dashboard
-{% endblock 'title' %}
-    
+
+
 
 {% block 'content' %}
    {% include 'includes/messages.html' %}
     <!-- Main Section Start -->
 		<div class="main-section">
-			{% include 'includes/v_cover.html' %}   		<!-- V cover includes -->
+			{% include 'customers/cover.html' %}
 			<div class="page-section account-header buyer-logged-in">
 				<div class="container">
 					<div class="row">
 						<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-							{% include 'includes/v_sidebar.html' %}          <!-- V sidebar includes -->
+							{% include 'includes/v_sidebar.html' %}
 						</div>
 						<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
 							<div class="user-dashboard loader-holder">
-								<div class="user-holder">
-								
-									<h5 class='text-uppercase'>Overview</h5>
-									<div class="row">
-										<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-											<div class="card">
-												<div class="card-header">
-													Total Orders
-												</div>
-												<div class="card-body text-center">
-													<a href="#"><h5 class='card-title'>{{ count }}</h5></a>
-												</div>
-											</div>
-										</div>
-
-										<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-											<div class="card">
-												<div class="card-header">
-													Total Revenue
-												</div>
-												<div class="card-body text-center">
-													<a href="#"><h5 class='card-title'>${{ total_revenue }}</h5></a>
-												</div>
-											</div>
-										</div>
-
-										<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-											<div class="card">
-												<div class="card-header">
-													This Month
-												</div>
-												<div class="card-body text-center">
-													<a href="#"><h5 class='card-title'>${{ currentMonth_revenue }}</h5></a>
-												</div>
-											</div>
-										</div>
-									</div>
+								<div class="user-holder">								
+									<br>
 									<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 										<div class="row">
 											<div class="element-title has-border right-filters-row">
-												<h5>Recent Orders</h5>												
+												<h5>All Orders</h5>												
 											</div>
 										</div>
 									</div>
 									<div class="row">
 										<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-											<table class="table">
+											<table class="table" id="OrdersTable">
 												<thead>
 												  <tr>
 													<th scope="col">#Order</th>
@@ -84,7 +46,7 @@
 													<td>{{ order.get_total_by_vendor.grand_total }}</td>
 													<td>{{ order.status }}</td>
 													<td>{{ order.created_at }}</td>
-													<td><a class='btn btn-danger' href="{% url 'vendor-order-detail' order.order_number %}">Details</a> </td>
+													<td><a class='btn btn-danger' href="{% url 'order-detail' order.order_number %}">Details</a> </td>
 												  </tr>
 												{% endfor %}	 
 												</tbody>

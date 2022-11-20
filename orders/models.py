@@ -2,6 +2,11 @@ from django.db import models
 from accounts.models import User
 from menu.models import FoodItem
 
+import ast
+import simplejson as json
+
+exposed_request = ''
+
 #MODEL
 from vendor.models import (
     Vendor
@@ -62,6 +67,35 @@ class Order(models.Model):
     def __str__(self):
         return self.order_number
 
+    def get_total_by_vendor(self):
+        vendor = Vendor.objects.get(user=exposed_request.user)        
+        sub_total, tax, = 0,0
+        tax_dict = {}
+        if self.total_data:
+            post_total_data = json.loads(self.total_data)            
+            data = post_total_data.get(str(vendor.id))
+            
+            
+            for key, val in data.items():
+                sub_total += float(key) 
+                val = val.replace("'", '"')
+                val = json.loads(val)
+                tax_dict.update(val)
+                
+                
+                for i in val:
+                    for j in val[i]:
+                        tax += float(val[i][j])
+        
+        context = {
+            'tax_dict': tax_dict,
+            'tax': tax,
+            'sub_total': sub_total,
+            'grand_total': sub_total + tax
+            
+        }
+        return context
+  
     def order_placed_to(self):
         return ','.join([str(i) for i in self.vendors.all()])
 

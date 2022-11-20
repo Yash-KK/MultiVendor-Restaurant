@@ -56,6 +56,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
+    'orders.request_exposer.RequestExposerMiddleware'
 ]
 
 ROOT_URLCONF = 'FoodOnlineMain.urls'
